@@ -19,7 +19,7 @@ function App() {
         <ThemeSwitcherProvider themeMap={themes} defaultTheme={THEME_CONFIG.currentTheme} insertionPoint="styles-insertion-point">
           <Router>
             <Switch>
-              <Route path="/" component={Views}/>
+              <Route path="/" component={Views} />
             </Switch>
           </Router>
         </ThemeSwitcherProvider>

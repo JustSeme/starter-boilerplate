@@ -19,8 +19,8 @@ import {
 import FirebaseService from 'services/FirebaseService'
 
 export function* signInWithFBEmail() {
-  yield takeEvery(SIGNIN, function* ({payload}) {
-		const {email, password} = payload;
+	yield takeEvery(SIGNIN, function* ({ payload }) {
+		const { email, password } = payload;
 		try {
 			const user = yield call(FirebaseService.signInEmailRequest, email, password);
 			if (user.message) {
@@ -36,7 +36,7 @@ export function* signInWithFBEmail() {
 }
 
 export function* signOut() {
-  yield takeEvery(SIGNOUT, function* () {
+	yield takeEvery(SIGNOUT, function* () {
 		try {
 			const signOutUser = yield call(FirebaseService.signOutRequest);
 			if (signOutUser === undefined) {
@@ -52,8 +52,8 @@ export function* signOut() {
 }
 
 export function* signUpWithFBEmail() {
-  yield takeEvery(SIGNUP, function* ({payload}) {
-		const {email, password} = payload;
+	yield takeEvery(SIGNUP, function* ({ payload }) {
+		const { email, password } = payload;
 		try {
 			const user = yield call(FirebaseService.signUpEmailRequest, email, password);
 			if (user.message) {
@@ -70,7 +70,7 @@ export function* signUpWithFBEmail() {
 }
 
 export function* signInWithFBGoogle() {
-  yield takeEvery(SIGNIN_WITH_GOOGLE, function* () {
+	yield takeEvery(SIGNIN_WITH_GOOGLE, function* () {
 		try {
 			const user = yield call(FirebaseService.signInGoogleRequest);
 			if (user.message) {
@@ -86,7 +86,7 @@ export function* signInWithFBGoogle() {
 }
 
 export function* signInWithFacebook() {
-  yield takeEvery(SIGNIN_WITH_FACEBOOK, function* () {
+	yield takeEvery(SIGNIN_WITH_FACEBOOK, function* () {
 		try {
 			const user = yield call(FirebaseService.signInFacebookRequest);
 			if (user.message) {
@@ -102,11 +102,11 @@ export function* signInWithFacebook() {
 }
 
 export default function* rootSaga() {
-  yield all([
+	yield all([
 		fork(signInWithFBEmail),
 		fork(signOut),
 		fork(signUpWithFBEmail),
 		fork(signInWithFBGoogle),
 		fork(signInWithFacebook)
-  ]);
+	]);
 }
