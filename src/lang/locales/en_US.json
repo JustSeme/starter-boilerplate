@@ -6,7 +6,25 @@
 	"products": "Products",
 	"categories": "Categories",
 	"collections": "Collections",
+
 	"combo": "Combo",
+	"orders": "Orders",
+	"clients": "Clients",
+	"clients_list": "Clients list",
+	"clients_group": "Clients group",
+
+	"banners": "Banners",
+	"promo_codes": "Promo codes",
+	"offline_points": "Offline points",
+	"adresses": "Adresses",
+	"geofences": "Geofences",
+
+	"staff": "Staff",
+	"mailing": "Mailing",
+	"system": "System",
+	"settings": "Settings",
+	"mobile_app": "Mobile app",
+	"logs": "Logs",
 
 	
 	"sidenav.dashboard": "Dashboard",

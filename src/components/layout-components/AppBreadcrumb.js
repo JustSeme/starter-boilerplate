@@ -5,7 +5,7 @@ import navigationConfig from "configs/NavigationConfig";
 import IntlMessage from 'components/util-components/IntlMessage';
 
 let breadcrumbData = {
-	'/app': <IntlMessage id="home" />
+	'/app': <IntlMessage id="home" />,
 };
 
 navigationConfig.forEach((elm, i) => {
@@ -27,6 +27,8 @@ const BreadcrumbRoute = withRouter(props => {
 	const { location } = props;
 	const pathSnippets = location.pathname.split('/').filter(i => i);
 	const buildBreadcrumb = pathSnippets.map((_, index) => {
+		if (_ === 'home')
+			return ''
 		const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
 		return (
 			<Breadcrumb.Item key={url}>
