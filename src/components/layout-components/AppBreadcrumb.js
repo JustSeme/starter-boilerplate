@@ -29,13 +29,14 @@ const BreadcrumbRoute = withRouter(props => {
 	const { location } = props;
 	const pathSnippets = location.pathname.split('/').filter(i => i);
 	const buildBreadcrumb = pathSnippets.map((_, index) => {
+		let addedSlash = pathSnippets.length === index + 1 ? '' : ' / '
 		if (_ === 'home')
 			return ''
 		const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
 		return (
-			<Breadcrumb.Item key={url}>
-				<Link to={url}>{breadcrumbData[url]}</Link>
-			</Breadcrumb.Item>
+			<span key={url}>
+				<Link to={url}>{breadcrumbData[url]}</Link>{addedSlash}
+			</span>
 		);
 	});
 
