@@ -5,7 +5,7 @@ import ThemeConfigurator from './ThemeConfigurator';
 import { connect } from "react-redux";
 
 export class NavPanel extends Component {
-	state = { visible: false };
+  state = { visible: false };
 
   showDrawer = () => {
     this.setState({
@@ -17,13 +17,13 @@ export class NavPanel extends Component {
     this.setState({
       visible: false,
     });
-	};
-	
-	render() {
-		return (
+  };
+
+  render() {
+    return (
       <>
         <Menu mode="horizontal">
-          <Menu.Item onClick={this.showDrawer}>
+          <Menu.Item onClick={this.showDrawer} key='key'>
             <SettingOutlined className="nav-icon mr-0" />
           </Menu.Item>
         </Menu>
@@ -32,17 +32,17 @@ export class NavPanel extends Component {
           placement="right"
           width={350}
           onClose={this.onClose}
-          visible={this.state.visible}
+          open={this.state.visible}
         >
-          <ThemeConfigurator/>
+          <ThemeConfigurator />
         </Drawer>
       </>
     );
-	}
+  }
 }
 
 const mapStateToProps = ({ theme }) => {
-  const { locale } =  theme;
+  const { locale } = theme;
   return { locale }
 };
 

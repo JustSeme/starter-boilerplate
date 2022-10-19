@@ -1,7 +1,8 @@
-import { ADD_USERS, DELETE_USER } from "redux/constants/Clients"
+import { ADD_USERS, DELETE_USER, TOGGLE_IS_FETCHING } from "redux/constants/Clients"
 
 const initState = {
-    usersData: []
+    usersData: [],
+    isFetching: false,
 }
 
 
@@ -17,6 +18,19 @@ const clients = (state = initState, action) => {
             return {
                 ...state,
                 usersData: state.usersData.filter(item => item.id !== action.payload),
+            }
+        }
+        case TOGGLE_IS_FETCHING: {
+            if (state.isFetching) {
+                return {
+                    ...state,
+                    isFetching: false
+                }
+            } else {
+                return {
+                    ...state,
+                    isFetching: true
+                }
             }
         }
 

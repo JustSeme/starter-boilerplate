@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import { Avatar, Drawer, Divider } from 'antd';
-import { 
-	MobileOutlined, 
-	MailOutlined, 
-	UserOutlined, 
+import {
+	MobileOutlined,
+	MailOutlined,
+	UserOutlined,
 	CompassOutlined,
-	CalendarOutlined,
-	FacebookOutlined,
-	InstagramOutlined,
-	TwitterOutlined,
-	GlobalOutlined
+	HomeOutlined,
+	LinkOutlined,
+	MessageOutlined,
+	ReadOutlined,
 } from '@ant-design/icons';
 
 export class UserView extends Component {
 	render() {
-		const { data, visible, close} = this.props;
+		const { data, visible, close } = this.props;
 		return (
 			<Drawer
 				width={300}
@@ -26,7 +25,7 @@ export class UserView extends Component {
 				<div className="text-center mt-3">
 					<Avatar size={80} src={data?.img} />
 					<h3 className="mt-2 mb-0">{data?.name}</h3>
-					<span className="text-muted">{data?.personalInfo.title}</span>
+					<span className="text-muted">{data?.username}</span>
 				</div>
 				<Divider dashed />
 				<div className="">
@@ -36,42 +35,38 @@ export class UserView extends Component {
 						<span className="ml-3 text-dark">id: {data?.id}</span>
 					</p>
 					<p>
-						<CalendarOutlined />
-						<span className="ml-3 text-dark">Born in {data?.personalInfo.birthday}</span>
+						<LinkOutlined />
+						<span className="ml-3 text-dark">{data?.website}</span>
 					</p>
 				</div>
 				<div className="mt-5">
 					<h6 className="text-muted text-uppercase mb-3">CONTACT</h6>
 					<p>
 						<MobileOutlined />
-						<span className="ml-3 text-dark">{data?.personalInfo.phoneNumber}</span>
+						<span className="ml-3 text-dark">{data?.phone}</span>
 					</p>
 					<p>
 						<MailOutlined />
-						<span className="ml-3 text-dark">{data?.email? data?.email: '-'}</span>
+						<span className="ml-3 text-dark">{data?.email ? data?.email : '-'}</span>
 					</p>
 					<p>
 						<CompassOutlined />
-						<span className="ml-3 text-dark">{data?.personalInfo.location}</span>
+						<span className="ml-3 text-dark">{data?.address.city}</span>
 					</p>
 				</div>
 				<div className="mt-5">
-					<h6 className="text-muted text-uppercase mb-3">Social profiles</h6>
+					<h6 className="text-muted text-uppercase mb-3">Company</h6>
 					<p>
-						<FacebookOutlined />
-						<a href="/#" className="ml-3 text-dark">{data?.personalInfo.facebook? data?.personalInfo.facebook : '-'}</a>
+						<HomeOutlined />
+						<span className="ml-3 text-dark">{data?.company.name ? data?.company.name : '-'}</span>
 					</p>
 					<p>
-						<TwitterOutlined />
-						<a href="/#" className="ml-3 text-dark">{data?.personalInfo.twitter? data?.personalInfo.twitter : '-'}</a>
+						<MessageOutlined />
+						<span className="ml-3 text-dark">{data?.company.catchPhrase ? data?.company.catchPhrase : '-'}</span>
 					</p>
 					<p>
-						<InstagramOutlined />
-						<a href="/#" className="ml-3 text-dark">{data?.personalInfo.instagram? data?.personalInfo.instagram : '-'}</a>
-					</p>
-					<p>
-						<GlobalOutlined />
-						<a href="/#" className="ml-3 text-dark">{data?.personalInfo.site? data?.personalInfo.site : '-'}</a>
+						<ReadOutlined />
+						<span className="ml-3 text-dark">{data?.company.bs ? data?.company.bs : '-'}</span>
 					</p>
 				</div>
 			</Drawer>

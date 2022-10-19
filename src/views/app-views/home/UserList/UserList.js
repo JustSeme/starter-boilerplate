@@ -7,6 +7,9 @@ import AvatarStatus from 'components/shared-components/AvatarStatus';
 import { getUsers } from 'redux/thunk/Clients';
 import { deleteUserActionCreator } from 'redux/actions/Clients';
 import { connect } from 'react-redux';
+import { Spin } from 'antd';
+import { Redirect } from 'react-router-dom';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
 
 class UserList extends Component {
 	componentDidMount() {
@@ -38,8 +41,17 @@ class UserList extends Component {
 		});
 	}
 
+
 	render() {
 		const { userProfileVisible, selectedUser } = this.state;
+
+		if (this.props.isFetching) {
+			return (
+				<div style={{ 'textAlign': 'center' }}>
+					<Spin size='large' />
+				</div>
+			)
+		}
 
 		const tableColumns = [
 			{
@@ -66,10 +78,10 @@ class UserList extends Component {
 				},
 			},
 			{
-				title: 'Last online',
-				dataIndex: 'lastOnline',
-				render: date => (
-					<span>{moment.unix(date).format("MM/DD/YYYY")} </span>
+				title: 'Website',
+				dataIndex: 'website',
+				render: email => (
+					<span>{email}</span>
 				),
 				sorter: (a, b) => moment(a.lastOnline).unix() - moment(b.lastOnline).unix()
 			},
@@ -100,17 +112,22 @@ class UserList extends Component {
 		];
 		return (
 			<Card bodyStyle={{ 'padding': '0px' }}>
-				<Table columns={tableColumns} dataSource={this.props.usersData} rowKey='id' />
+				<Table onRow={onRow} columns={tableColumns} dataSource={this.props.usersData} rowKey='id' />
 				<UserView data={selectedUser} visible={userProfileVisible} close={() => { this.closeUserProfile() }} />
 			</Card>
 		)
 	}
 }
 
+const onRow = (record, rowIndex) => {
+	return {
+		onClick: () => <Redirect from={`${APP_PREFIX_PATH}`} to={`${APP_PREFIX_PATH}/home`} />
+	}
+}
 
 const mapStateToProps = ({ clients }) => {
-	const { usersData } = clients;
-	return { usersData }
+	const { usersData, isFetching } = clients;
+	return { usersData, isFetching }
 }
 
 const mapDispatchToProps = {
