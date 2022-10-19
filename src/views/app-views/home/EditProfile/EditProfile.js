@@ -35,7 +35,11 @@ export class EditProfile extends Component {
 	}
 
 	render() {
-		if (this.props.isFetchingProfile || Object.entries(this.props.profileData).length === 0) return <Spin />
+		if (this.props.isFetchingProfile || Object.entries(this.props.profileData).length === 0) return (
+			<div style={{ 'textAlign': 'center' }}>
+				<Spin size='large' />
+			</div>
+		)
 
 		const onFinish = () => {
 			const key = 'updatable';
