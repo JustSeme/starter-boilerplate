@@ -1,8 +1,10 @@
-import { ADD_USERS, DELETE_USER, TOGGLE_IS_FETCHING } from "redux/constants/Clients"
+import { ADD_USERS, CHANGE_AVATAR, DELETE_USER, SET_PROFILE, TOGGLE_IS_FETCHING, TOGGLE_IS_FETCHING_PROFILE } from "redux/constants/Clients"
 
 const initState = {
     usersData: [],
+    profileData: {},
     isFetching: false,
+    isFetchingProfile: false,
 }
 
 
@@ -31,6 +33,31 @@ const clients = (state = initState, action) => {
                     ...state,
                     isFetching: true
                 }
+            }
+        }
+        case SET_PROFILE: {
+            return {
+                ...state,
+                profileData: action.payload
+            }
+        }
+        case TOGGLE_IS_FETCHING_PROFILE: {
+            if (state.isFetchingProfile) {
+                return {
+                    ...state,
+                    isFetchingProfile: false
+                }
+            } else {
+                return {
+                    ...state,
+                    isFetchingProfile: true
+                }
+            }
+        }
+        case CHANGE_AVATAR: {
+            return {
+                ...state,
+                profileData: { ...state.profileData, img: action.payload }
             }
         }
 

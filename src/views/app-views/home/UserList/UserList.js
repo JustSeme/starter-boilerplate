@@ -8,7 +8,7 @@ import { getUsers } from 'redux/thunk/Clients';
 import { deleteUserActionCreator } from 'redux/actions/Clients';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 
 class UserList extends Component {
@@ -41,6 +41,11 @@ class UserList extends Component {
 		});
 	}
 
+	onRow = (record) => {
+		return {
+			onClick: () => this.props.history.push(`${APP_PREFIX_PATH}/home/main/clients/edit_profile/${record.id}`)
+		}
+	}
 
 	render() {
 		const { userProfileVisible, selectedUser } = this.state;
@@ -112,18 +117,13 @@ class UserList extends Component {
 		];
 		return (
 			<Card bodyStyle={{ 'padding': '0px' }}>
-				<Table onRow={onRow} columns={tableColumns} dataSource={this.props.usersData} rowKey='id' />
+				<Table onRow={this.onRow} columns={tableColumns} dataSource={this.props.usersData} rowKey='id' />
 				<UserView data={selectedUser} visible={userProfileVisible} close={() => { this.closeUserProfile() }} />
 			</Card>
 		)
 	}
 }
 
-const onRow = (record, rowIndex) => {
-	return {
-		onClick: () => <Redirect from={`${APP_PREFIX_PATH}`} to={`${APP_PREFIX_PATH}/home`} />
-	}
-}
 
 const mapStateToProps = ({ clients }) => {
 	const { usersData, isFetching } = clients;
@@ -135,4 +135,4 @@ const mapDispatchToProps = {
 	deleteUser: deleteUserActionCreator
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserList)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserList))

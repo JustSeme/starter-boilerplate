@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
-import { Form, Avatar, Button, Input, DatePicker, Row, Col, message, Upload } from 'antd';
+import { Form, Avatar, Button, Input, Row, Col, message, Upload, Spin } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { ROW_GUTTER } from 'constants/ThemeConstant';
 import Flex from 'components/shared-components/Flex'
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { getUserProfile } from 'redux/thunk/Clients';
+import { changeAvatarActionCreator } from 'redux/actions/Clients';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
 
 export class EditProfile extends Component {
 
 	avatarEndpoint = 'https://www.mocky.io/v2/5cc8019d300000980a055e76'
 
-	state = {
-		avatarUrl: '/img/avatars/thumb-6.jpg',
-		name: 'Charlie Howard',
-		email: 'charlie.howard@themenate.com',
-		userName: 'Charlie',
-		dateOfBirth: null,
-		phoneNumber: '+44 (1532) 135 7921',
-		website: '',
-		address: '',
-		city: '',
-		postcode: ''
+	refreshProfile() {
+		const userId = this.props.match.params.userId ? this.props.match.params.userId : 1
+		this.props.getUserProfile(userId)
+	}
+
+	componentDidMount() {
+		this.refreshProfile()
+	}
+
+	componentDidUpdate(prevProps) {
+		if (this.props.match.params.userId !== prevProps.match.params.userId) {
+			this.refreshProfile()
+		}
 	}
 
 	getBase64(img, callback) {
@@ -28,23 +35,14 @@ export class EditProfile extends Component {
 	}
 
 	render() {
+		if (this.props.isFetchingProfile || Object.entries(this.props.profileData).length === 0) return <Spin />
 
-		const onFinish = values => {
+		const onFinish = () => {
 			const key = 'updatable';
 			message.loading({ content: 'Updating...', key });
 			setTimeout(() => {
-				this.setState({
-					name: values.name,
-					email: values.email,
-					userName: values.userName,
-					dateOfBirth: values.dateOfBirth,
-					phoneNumber: values.phoneNumber,
-					website: values.website,
-					address: values.address,
-					city: values.city,
-					postcode: values.postcode,
-				})
 				message.success({ content: 'Done!', key, duration: 2 });
+				this.props.history.push(`${APP_PREFIX_PATH}/home/main/clients/clients_list`)
 			}, 1000);
 		};
 
@@ -60,26 +58,20 @@ export class EditProfile extends Component {
 			}
 			if (info.file.status === 'done') {
 				this.getBase64(info.file.originFileObj, imageUrl =>
-					this.setState({
-						avatarUrl: imageUrl,
-					}),
+					this.changeAvatarActionCreator(imageUrl),
 				);
 				message.success({ content: 'Uploaded!', key, duration: 1.5 });
 			}
 		};
 
 		const onRemoveAvater = () => {
-			this.setState({
-				avatarUrl: ''
-			})
+			this.props.changeAvatarActionCreator('')
 		}
-
-		const { name, email, userName, dateOfBirth, phoneNumber, website, address, city, postcode, avatarUrl } = this.state;
 
 		return (
 			<>
 				<Flex alignItems="center" mobileFlex={false} className="text-center text-md-left">
-					<Avatar size={90} src={avatarUrl} icon={<UserOutlined />} />
+					<Avatar size={90} src={this.props.profileData.img} icon={<UserOutlined />} />
 					<div className="ml-md-3 mt-md-0 mt-3">
 						<Upload onChange={onUploadAavater} showUploadList={false} action={this.avatarEndpoint}>
 							<Button type="primary">Change Avatar</Button>
@@ -93,15 +85,15 @@ export class EditProfile extends Component {
 						layout="vertical"
 						initialValues={
 							{
-								'name': name,
-								'email': email,
-								'username': userName,
-								'dateOfBirth': dateOfBirth,
-								'phoneNumber': phoneNumber,
-								'website': website,
-								'address': address,
-								'city': city,
-								'postcode': postcode
+								'name': this.props.profileData.name,
+								'email': this.props.profileData.email,
+								'username': this.props.profileData.username,
+								'companyName': this.props.profileData.company.name,
+								'phoneNumber': this.props.profileData.phone,
+								'website': this.props.profileData.website,
+								'address': `${this.props.profileData.address.street}, ${this.props.profileData.address.suite}`,
+								'city': this.props.profileData.address.city,
+								'postcode': this.props.profileData.address.zipcode
 							}
 						}
 						onFinish={onFinish}
@@ -153,10 +145,10 @@ export class EditProfile extends Component {
 									</Col>
 									<Col xs={24} sm={24} md={12}>
 										<Form.Item
-											label="Date of Birth"
-											name="dateOfBirth"
+											label="Company"
+											name="companyName"
 										>
-											<DatePicker className="w-100" />
+											<Input />
 										</Form.Item>
 									</Col>
 									<Col xs={24} sm={24} md={12}>
@@ -212,4 +204,9 @@ export class EditProfile extends Component {
 	}
 }
 
-export default EditProfile
+const mapStateToProps = ({ clients }) => {
+	const { profileData, isFetchingProfile } = clients;
+	return { profileData, isFetchingProfile }
+}
+
+export default withRouter(connect(mapStateToProps, { getUserProfile, changeAvatarActionCreator })(EditProfile))
